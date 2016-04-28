@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webServlet>
+	<services>
+		<service methodName="updatePerson" classPath="com.control.PersonControl">/updatePerson.do</service>
+		<service methodName="updateCert" classPath="com.control.CertControl">/updateCert.do</service>
+	</services>
+</webServlet>

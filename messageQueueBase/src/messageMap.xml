@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Message>
+	<updates name="PersonService">
+		<methodName name="updteCertMesssage" classPath="process_.CertImpl"></methodName>
+		<methodName name="updateDev" classPath="process_.DevImpl"></methodName>
+	</updates>
+	
+	<updates name="CertService">
+		<methodName name="updteCertMesssage" classPath="process_.CertImpl"></methodName>
+		<methodName name="updateDev" classPath="process_.DevImpl"></methodName>
+	</updates>
+</Message>
