@@ -1,8 +1,10 @@
 package system.bean;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class EntityBean<K, V> extends HashMap<K, V>
@@ -27,33 +29,39 @@ public class EntityBean<K, V> extends HashMap<K, V>
 			return null;
 	}
 	
-//	public boolean insert()
-//	{
-//		
-//	}
-//	
 	public boolean insert(Object o)
+	{
+		return insert(o,o.getClass().getSimpleName());
+	}
+	
+	public boolean insert(Object o,String tableName)
 	{
 		try
 		{
 			Map<String,Object> map = reflecx(o);
 			if(map != null && map.size() > 0)
 			{
+				List<String> names = new ArrayList<>();
+				List<Object> values = new ArrayList<>();
 				for(Iterator<String> i = map.keySet().iterator(); i.hasNext();)
 				{
 					String key = i.next();
 					Object value = map.get(key);
+					names.add(key);
+					values.add(value);
 				}
+				String sql = SqlFactory.getInsertSql(names.toArray(new String[names.size()]), values.toArray(new Object[values.size()]), tableName);
 			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
-	public  Map<String,Object> reflecx(Object o) throws IllegalArgumentException, IllegalAccessException, InstantiationException
+	private  Map<String,Object> reflecx(Object o) throws IllegalArgumentException, IllegalAccessException, InstantiationException
 	{
 		Map<String,Object> map = new HashMap<>();
 		Class<?> c = o.getClass();
@@ -69,5 +77,10 @@ public class EntityBean<K, V> extends HashMap<K, V>
 			}
 		}
 		return map;
+	}
+	
+	public Object dealSql(String sql)
+	{
+		return null;
 	}
 }
