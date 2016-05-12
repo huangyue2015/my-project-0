@@ -2,11 +2,12 @@ package com.hbase.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.MasterNotRunningException;
@@ -49,10 +50,10 @@ public class HbaseTest
 
 	public static void main(String[] args)
 	{
-		createTable("user", new String[]{"name","username","password"});
+		createTable("user");
 	}
 
-	public static void createTable(String tableName, String[] familys)
+	public static void createTable(String tableName)
 	{
 		try
 		{
@@ -63,8 +64,6 @@ public class HbaseTest
 			else
 			{
 				HTableDescriptor hTableDescriptor = new HTableDescriptor(tableName);
-				for(String family:familys)
-					hTableDescriptor.addFamily(new HColumnDescriptor(family));
 				hBaseAdmin.createTable(hTableDescriptor);
 				System.out.println("creat table "+tableName+" is ok");
 			}
@@ -83,15 +82,21 @@ public class HbaseTest
 		}
 	}
 
-	public static void insertData(String tableName)
+	public static void insertData(String tableName,Map<String,String> map,String rowkey)
 	{
-		System.out.println("start insert data ......");
+		System.out.println("insert data start");
 		HTablePool pool = new HTablePool(configuration, 1000);
 		HTable table = (HTable) pool.getTable(tableName);
-		Put put = new Put("112233bbbcccc".getBytes());// 一个PUT代表一行数据，再NEW一个PUT表示第二行数据,每行一个唯一的ROWKEY，此处rowkey为put构造方法中传入的值
-		put.add("column1".getBytes(), null, "aaa".getBytes());// 本行数据的第一列
-		put.add("column2".getBytes(), null, "bbb".getBytes());// 本行数据的第三列
-		put.add("column3".getBytes(), null, "ccc".getBytes());// 本行数据的第三列
+		// 一个PUT代表一行数据，再NEW一个PUT表示第二行数据,每行一个唯一的ROWKEY，此处rowkey为put构造方法中传入的值 
+		Put put = new Put(rowkey.getBytes());
+		
+		Iterator<String> keyIterable = map.keySet().iterator();
+		while (keyIterable.hasNext())
+		{
+			String key = keyIterable.next();
+			String val = map.get(key);
+			put.add(key.getBytes(), null, val.getBytes());
+		}
 		try
 		{
 			table.put(put);
@@ -100,7 +105,7 @@ public class HbaseTest
 		{
 			e.printStackTrace();
 		}
-		System.out.println("end insert data ......");
+		System.out.println("insert data is ok \n\n\n");
 	}
 
 	public static void dropTable(String tableName)
@@ -131,7 +136,7 @@ public class HbaseTest
 		try
 		{
 			HTable table = new HTable(configuration, tablename);
-			List list = new ArrayList();
+			List<Delete> list = new ArrayList<>();
 			Delete d1 = new Delete(rowkey.getBytes());
 			list.add(d1);
 
@@ -146,11 +151,6 @@ public class HbaseTest
 
 	}
 
-	public static void deleteByCondition(String tablename, String rowkey)
-	{
-		// 目前还没有发现有效的API能够实现根据非rowkey的条件删除这个功能能，还有清空表全部数据的API操作
-
-	}
 
 	public static void QueryAll(String tableName)
 	{
@@ -173,95 +173,4 @@ public class HbaseTest
 			e.printStackTrace();
 		}
 	}
-
-	public static void QueryByCondition1(String tableName)
-	{
-
-		HTablePool pool = new HTablePool(configuration, 1000);
-		HTable table = (HTable) pool.getTable(tableName);
-		try
-		{
-			Get scan = new Get("abcdef".getBytes());// 根据rowkey查询
-			Result r = table.get(scan);
-			System.out.println("获得到rowkey:" + new String(r.getRow()));
-			for (KeyValue keyValue : r.raw())
-			{
-				System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public static void QueryByCondition2(String tableName)
-	{
-
-		try
-		{
-			HTablePool pool = new HTablePool(configuration, 1000);
-			HTable table = (HTable) pool.getTable(tableName);
-			Filter filter = new SingleColumnValueFilter(Bytes.toBytes("column1"), null, CompareOp.EQUAL, Bytes.toBytes("aaa")); // 当列column1的值为aaa时进行查询
-			Scan s = new Scan();
-			s.setFilter(filter);
-			ResultScanner rs = table.getScanner(s);
-			for (Result r : rs)
-			{
-				System.out.println("获得到rowkey:" + new String(r.getRow()));
-				for (KeyValue keyValue : r.raw())
-				{
-					System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
-	public static void QueryByCondition3(String tableName)
-	{
-
-		try
-		{
-			HTablePool pool = new HTablePool(configuration, 1000);
-			HTable table = (HTable) pool.getTable(tableName);
-
-			List<Filter> filters = new ArrayList<Filter>();
-
-			Filter filter1 = new SingleColumnValueFilter(Bytes.toBytes("column1"), null, CompareOp.EQUAL, Bytes.toBytes("aaa"));
-			filters.add(filter1);
-
-			Filter filter2 = new SingleColumnValueFilter(Bytes.toBytes("column2"), null, CompareOp.EQUAL, Bytes.toBytes("bbb"));
-			filters.add(filter2);
-
-			Filter filter3 = new SingleColumnValueFilter(Bytes.toBytes("column3"), null, CompareOp.EQUAL, Bytes.toBytes("ccc"));
-			filters.add(filter3);
-
-			FilterList filterList1 = new FilterList(filters);
-
-			Scan scan = new Scan();
-			scan.setFilter(filterList1);
-			ResultScanner rs = table.getScanner(scan);
-			for (Result r : rs)
-			{
-				System.out.println("获得到rowkey:" + new String(r.getRow()));
-				for (KeyValue keyValue : r.raw())
-				{
-					System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
-				}
-			}
-			rs.close();
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
 }
