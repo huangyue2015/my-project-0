@@ -1,4 +1,4 @@
-package com.hadoop.de;
+package com.hadoop.test;
 
 import java.io.IOException;
 
