@@ -10,7 +10,7 @@ public class DBBean
 	private String	type = "PostgreSQL";
 	//默认数据库名称
 	private String	db = "test";
-	private String	uri = "localhost";
+	private String	uri = "192.168.3.236";
 	private String	port = "5432";
 	private String	uid ="postgres";
 	private String	pwd = "123456";
