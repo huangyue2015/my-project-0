@@ -11,8 +11,8 @@ public class DBBean
 	//默认数据库名称
 	private String	db = "test";
 	private String	uri = "localhost";
-	private String	port = "3306";
-	private String	uid ="root";
+	private String	port = "5432";
+	private String	uid ="postgres";
 	private String	pwd = "123456";
 	private int		minpool = 3;
 	private int		maxpool = 300;
