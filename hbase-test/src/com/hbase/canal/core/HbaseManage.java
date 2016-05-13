@@ -1,6 +1,8 @@
 package com.hbase.canal.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +92,7 @@ public class HbaseManage
 	 * 删除表
 	 * @param tableName
 	 */
-	public static void dropTable(String tableName)
+	public  void dropTable(String tableName)
 	{
 		try
 		{
@@ -119,7 +121,7 @@ public class HbaseManage
 	 * @param map 数据集合
 	 * @param rowkey 主键
 	 */
-	public static void insertData(String tableName,Map<String,String> map,String rowkey)
+	public  void insertData(String tableName,Map<String,String> map,String rowkey)
 	{
 		System.out.println("insert data start");
 		HTablePool pool = new HTablePool(configuration, 1000);
@@ -151,8 +153,9 @@ public class HbaseManage
 	 * 查询表中所有数据
 	 * @param tableName
 	 */
-	public static void QueryAll(String tableName)
+	public List<Map<String,String>> QueryAll(String tableName)
 	{
+		List<Map<String,String>> lists = new ArrayList<>();
 		HTablePool pool = new HTablePool(configuration, 1000);
 		HTableInterface table = pool.getTable(tableName);
 		try
@@ -160,18 +163,28 @@ public class HbaseManage
 			ResultScanner rs = table.getScanner(new Scan());
 			for (Result r : rs)
 			{
+				Map<String,String> map = new HashMap<>();
+				map.put("rowKey", new String(r.getRow()));
+				
 				System.out.println("获得到rowkey:" + new String(r.getRow()));
+				
 				for (KeyValue keyValue : r.raw())
 				{
 					System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
+					
+					map.put(new String(keyValue.getFamily()), new String(keyValue.getValue()));
 				}
 				System.out.println("-----------------------------\n");
+				
+				lists.add(map);
 			}
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+		
+		return lists;
 	}
 	
 	public static void main(String[] args)
@@ -192,6 +205,6 @@ public class HbaseManage
 //			String rowKey = stringBuffer.toString();
 //			insertData(meta.getTableName(), map, rowKey);
 //		}
-		QueryAll(meta.getTableName());
+//		QueryAll(meta.getTableName());
 	}
 }
