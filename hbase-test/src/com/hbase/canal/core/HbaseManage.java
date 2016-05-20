@@ -15,7 +15,6 @@ import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.MasterNotRunningException;
 import org.apache.hadoop.hbase.ZooKeeperConnectionException;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTablePool;
 import org.apache.hadoop.hbase.client.Put;
@@ -53,7 +52,7 @@ public class HbaseManage
 	 * @param tableName
 	 * @param familys
 	 */
-	public void creatTable(String tableName,String[] familys)
+	public void creatTable(String tableName,String[] colums)
 	{
 		try
 		{
@@ -64,8 +63,7 @@ public class HbaseManage
 			else
 			{
 				HTableDescriptor hTableDescriptor = new HTableDescriptor(tableName);
-				for(String family:familys)
-					hTableDescriptor.addFamily(new HColumnDescriptor(family));
+				hTableDescriptor.addFamily(new HColumnDescriptor("cert"));
 				hBaseAdmin.createTable(hTableDescriptor);
 				System.out.println("creat table "+tableName+" is ok");
 			}
@@ -121,7 +119,7 @@ public class HbaseManage
 	 * @param map 数据集合
 	 * @param rowkey 主键
 	 */
-	public  void insertData(String tableName,Map<String,String> map,String rowkey)
+	public static  void insertData(String tableName,Map<String,String> map,String rowkey)
 	{
 		System.out.println("insert data start");
 		HTablePool pool = new HTablePool(configuration, 1000);
@@ -135,7 +133,7 @@ public class HbaseManage
 			String key = keyIterable.next();
 			String val = map.get(key) ;
 			if(key != null && val != null)
-				put.add(key.getBytes(), null, val.getBytes());
+				put.add("cert".getBytes(), key.getBytes(), val.getBytes());
 			System.out.println(rowkey + ":" + key  +":"+ val);
 		}
 		try
@@ -153,7 +151,7 @@ public class HbaseManage
 	 * 查询表中所有数据
 	 * @param tableName
 	 */
-	public List<Map<String,String>> QueryAll(String tableName)
+	public static List<Map<String,String>> QueryAll(String tableName)
 	{
 		List<Map<String,String>> lists = new ArrayList<>();
 		HTablePool pool = new HTablePool(configuration, 1000);
@@ -187,24 +185,38 @@ public class HbaseManage
 		return lists;
 	}
 	
-	public static void main(String[] args)
+	
+	public static void main()
+	{
+		new HbaseManage().creatTable("certStat",new String[]{"areaid","companyno","add","renew","reissue","off","change","count"});
+	}
+	
+	public static void main2()
 	{
 		Meta meta = new Meta.Qualification();
-//		
-//		//1创建Hbase表
-////		new HbaseManage().creatTable(meta);
-//		
-//		//2查询PostgreSQL 中的数据,并插入到Hbase中
-//		List<Map<String,String>> lists = new DataStream().getDataFromDB("Select * from qualification");
-//		for(Map<String,String> map :lists)
-//		{
-//			StringBuffer stringBuffer = new StringBuffer(map.get("areaid"));
-//			stringBuffer.append(map.get("providetime").substring(0, 4));
-//			stringBuffer.append(map.get("providetime").substring(5, 7));
-//			stringBuffer.append(map.get("providetime").substring(8, 10));
-//			String rowKey = stringBuffer.toString();
-//			insertData(meta.getTableName(), map, rowKey);
-//		}
-//		QueryAll(meta.getTableName());
+		
+		//1创建Hbase表
+		new HbaseManage().creatTable(meta);
+		
+		//2查询PostgreSQL 中的数据,并插入到Hbase中
+		List<Map<String,String>> lists = new DataStream().getDataFromDB("Select * from qualification");
+		for(Map<String,String> map :lists)
+		{
+			/*StringBuffer stringBuffer = new StringBuffer(map.get("areaid"));
+			stringBuffer.append(map.get("providetime").substring(0, 4));
+			stringBuffer.append(map.get("providetime").substring(5, 7));
+			stringBuffer.append(map.get("providetime").substring(8, 10));
+			String rowKey = stringBuffer.toString();*/
+			insertData(meta.getTableName(), map, map.get("id"));
+		}
+		QueryAll(meta.getTableName());
+	}
+	
+	public static void main(String[] args)
+	{
+
+//		new HbaseManage().dropTable("qualification");
+//		main2();
+		QueryAll("qualification");
 	}
 }

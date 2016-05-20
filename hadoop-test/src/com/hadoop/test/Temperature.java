@@ -1,4 +1,3 @@
-package com.hadoop.test;
 
 import java.io.IOException;
 
@@ -87,9 +86,9 @@ public class Temperature
 	public static void main(String[] arges)
 	{
 		//输入路径
-		String dst = "hdfs://192.168.153.131:9000/input.txt";
+		String dst = "hdfs://192.168.153.131:9000/data/input.txt";
 		//输出路径，必须是不存在的，空文件加也不行。
-		String dstOut = "hdfs://192.168.153.131:9000/output3";
+		String dstOut = "hdfs://192.168.153.131:9000/output";
 		
 		Configuration hadoopConfig = new Configuration();
 		hadoopConfig.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());

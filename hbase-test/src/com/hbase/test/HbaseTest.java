@@ -23,6 +23,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
@@ -51,7 +52,8 @@ public class HbaseTest
 
 	public static void main(String[] args)
 	{
-		
+		QueryAll("qualification");
+//		dropTable("qualification");
 	}
 
 	public static void createTable(String tableName)
@@ -157,18 +159,21 @@ public class HbaseTest
 	public static void QueryAll(String tableName)
 	{
 		HTablePool pool = new HTablePool(configuration, 1000);
-		HTable table = (HTable) pool.getTable(tableName);
+		Table table =  pool.getTable(tableName);
 		try
 		{
 			ResultScanner rs = table.getScanner(new Scan());
+			int sum = 0;;
 			for (Result r : rs)
 			{
 				System.out.println("获得到rowkey:" + new String(r.getRow()));
 				for (KeyValue keyValue : r.raw())
 				{
-					System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
+//					System.out.println("列：" + new String(keyValue.getFamily()) + "====值:" + new String(keyValue.getValue()));
 				}
+				sum++;
 			}
+			System.out.println(sum);
 		}
 		catch (IOException e)
 		{

@@ -2,10 +2,10 @@ package com.hbase.canal.core;
 
 public abstract class Meta
 {
-	abstract String getTableName();
-	abstract String[] getMetaData();
+	public abstract String getTableName();
+	public abstract String[] getMetaData();
 	
-	static class Qualification extends Meta
+	public static class Qualification extends Meta
 	{
 		public static String[] METADATA = {"id","cardtype","cardno","cardno2","personname","birthday","sex",
 				"edulevel","nations","accounttype","gettype","qualificationtype","qualificationstate",
@@ -23,7 +23,7 @@ public abstract class Meta
 		}
 
 		@Override
-		String[] getMetaData()
+		public String[] getMetaData()
 		{
 			return METADATA;
 		}
