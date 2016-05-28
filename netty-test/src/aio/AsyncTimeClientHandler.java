@@ -50,7 +50,7 @@ public class AsyncTimeClientHandler implements Runnable,CompletionHandler<Void, 
 	@Override
 	public void completed(Void result, AsyncTimeClientHandler attachment)
 	{
-		byte[] req = "qurey time order".getBytes();
+		byte[] req = "query time order".getBytes();
 		ByteBuffer writeByteBuffer = ByteBuffer.allocate(req.length);
 		writeByteBuffer.put(req);
 		writeByteBuffer.flip();

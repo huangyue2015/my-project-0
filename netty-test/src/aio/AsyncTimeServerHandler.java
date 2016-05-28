@@ -95,7 +95,7 @@ class  ReadCompleHandler implements CompletionHandler<Integer, ByteBuffer>
 		{
 			String req = new String(body,"UTF-8");
 			System.out.println("the time server receive order :" + req);
-			String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(req) ?
+			String currentTime = "query time order".equalsIgnoreCase(req) ?
 					new Date(System.currentTimeMillis()).toString():
 					"Bad order";
 			doWrite(currentTime);		
