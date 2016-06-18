@@ -1,32 +1,26 @@
 package thread;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class VolatileTest
 {
-	static volatile long vl = 0L; // 使用volatile声明64位的long型变量
+	private static volatile Queue<Ticket> tickets = new LinkedList<>();
 
-	public void set(long l)
+	public void init()
 	{
-		vl = l; // 单个volatile变量的写
-	}
-
-	public void getAndIncrement()
-	{
-		vl++; // 复合（多个）volatile变量的读/写
-	}
-
-	public long get()
-	{
-		return vl; // 单个volatile变量的读
+		for(int i = 0; i < 10000; i++)
+		{
+			tickets.offer(new Ticket(i+"", 0));
+		}
 	}
 	
 	public static void main(String[] args)
 	{
-
-		// 同时启动1000个线程，去进行i++计算，看看实际结果
-
-		for (int i = 0; i < 1001; i++)
+		new VolatileTest().init();
+		for (int i = 0; i < 1150; i++)
 		{
-			new Thread(new VolatileFeaturesExample((long) i)).start();
+			new Thread(new VolatileFeaturesExample() ).start();
 		}
 		try
 		{
@@ -36,25 +30,65 @@ public class VolatileTest
 		{
 			e.printStackTrace();
 		}
-
-		// 这里每次运行的值都有可能不同,可能为1000
-		System.out.println("运行结果:Counter.count=" + new VolatileTest().get());
 	}
 	
 	static class VolatileFeaturesExample implements Runnable
 	{
-		private long i;
-		
-		public VolatileFeaturesExample(Long i)
-		{
-			this.i = i;
-		}
-		
 		@Override
 		public void run()
 		{
-			new VolatileTest().set(i);
+			if(!tickets.isEmpty())
+			{
+				Ticket tt = tickets.poll();
+				System.out.println(tickets.size());
+				if(tt != null)
+					System.out.println(tt.getNum());
+			}
 		}
 		
 	}
 }
+
+class Ticket
+{
+	private String num;
+	private int state;
+	public String getNum()
+	{
+		return num;
+	}
+	public void setNum(String num)
+	{
+		this.num = num;
+	}
+	public int getState()
+	{
+		return state;
+	}
+	public void setState(int state)
+	{
+		this.state = state;
+	}
+	
+	public Ticket(String num, int state)
+	{
+		super();
+		this.num = num;
+		this.state = state;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

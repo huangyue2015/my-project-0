@@ -71,6 +71,7 @@ class TimeServerHandler implements Runnable
 				body = in.readLine();
 				if(body == null)
 					break;
+				System.out.println(body);
 				if(body.equalsIgnoreCase("QUERY TIME ORDER"))
 				{
 					currentTime = new Date(System.currentTimeMillis()).toString();
