@@ -14,12 +14,12 @@ import json.httpjson.HttpJsonResponse;
 public class HttpJsonResponseDecoder extends AbstractHttpJsonDecoder<DefaultFullHttpResponse>
 {
 
-	protected HttpJsonResponseDecoder(Class<?> clazz)
+	public HttpJsonResponseDecoder(Class<?> clazz)
 	{
 		this(clazz, false);
 	}
 
-	protected HttpJsonResponseDecoder(Class<?> clazz, boolean isPrint)
+	public HttpJsonResponseDecoder(Class<?> clazz, boolean isPrint)
 	{
 		super(clazz,isPrint);
 	}

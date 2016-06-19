@@ -27,7 +27,7 @@ public class HttpJsonRequestDecoder extends AbstractHttpJsonDecoder<FullHttpRequ
 		this(clazz, false);
 	}
 
-	protected HttpJsonRequestDecoder(Class<?> clazz, boolean isPrint)
+	public HttpJsonRequestDecoder(Class<?> clazz, boolean isPrint)
 	{
 		super(clazz, isPrint);
 	}
