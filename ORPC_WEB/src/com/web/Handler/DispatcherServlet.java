@@ -1,4 +1,4 @@
-package com.servlet;
+package com.web.Handler;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
