@@ -1,9 +1,10 @@
-package com.util;
+package com.web;
 
 import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import system.bean.EntityBean;
+
+import com.core.EntityBean;
 
 @SuppressWarnings("rawtypes")
 public class Serialization

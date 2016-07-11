@@ -1,27 +1,24 @@
 package com.web;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.util.Correspond;
+import org.apache.log4j.Logger;
 
 import flexjson.JSONSerializer;
-import po.Person;
 
 @WebServlet(name="DispatcherServlet",urlPatterns="*.do")
 public class DispatcherServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(DispatcherServlet.class);
 
 	@Override
 	public void service(HttpServletRequest req, HttpServletResponse resp)
@@ -29,8 +26,10 @@ public class DispatcherServlet extends HttpServlet
 		try
 		{
 			String method = req.getRequestURI();
-			System.out.println(method);
-			com.util.WebServlet webServlet = com.util.WebServlet.getInstance();
+			
+			log.info("拦截到的方法名:" + method);
+			
+			com.web.WebServlet webServlet = com.web.WebServlet.getInstance();
 			Map<String, Correspond<String,String>> map =webServlet.getServiceMap();
 			Set<String> keys = map.keySet();
 			for(String key : keys)

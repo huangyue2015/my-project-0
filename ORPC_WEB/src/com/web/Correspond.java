@@ -1,4 +1,4 @@
-package com.util;
+package com.web;
 
 public class Correspond<Name,Value>
 {
