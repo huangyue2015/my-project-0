@@ -1,4 +1,4 @@
-package com.web.Handler.filter;
+package com.web.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
