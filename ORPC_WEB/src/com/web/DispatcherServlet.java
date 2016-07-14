@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
-import flexjson.JSONSerializer;
-
 @WebServlet(name="DispatcherServlet",urlPatterns="*.do")
 public class DispatcherServlet extends HttpServlet
 {
@@ -41,9 +39,10 @@ public class DispatcherServlet extends HttpServlet
 					try
 					{
 						PrintWriter out = resp.getWriter();
-						out.print(new JSONSerializer().serialize(o));
+						out.print("张三OK");
 						out.flush();
 						out.close();
+						
 					}
 					catch (IOException e)
 					{

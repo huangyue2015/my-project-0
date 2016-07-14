@@ -10,8 +10,8 @@ public class SqlFactory
 	public static String getInsertSql(String[] names,Object[] values,String tableName)
 	{
 		return String.format("insert into %s%s values%s",tableName, arrayToString(names),arrayToString(values,true));
-	}
 	
+	}
 	private static String arrayToString(Object[] arges,boolean flag)
 	{
 		if(arges == null)
