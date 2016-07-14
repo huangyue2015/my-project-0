@@ -2,12 +2,12 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>ORPC_WEB</display-name>
   <listener>
-    <listener-class>com.listener.ListenerContextHander</listener-class>
+    <listener-class>com.web.listener.ListenerContextHander</listener-class>
   </listener>
   
   <filter>
   	 <filter-name>setCharacterEncoding</filter-name>
-  	 <filter-class>com.filter.EncodingFilter</filter-class>
+  	 <filter-class>com.web.filter.EncodingFilter</filter-class>
   	 <init-param>
   	 	<param-name>encoding</param-name>
   	 	<param-value>UTF-8</param-value>

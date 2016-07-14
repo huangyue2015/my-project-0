@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <webServlet>
 	<services>
-		<service methodName="updatePerson" classPath="com.control.PersonControl">/updatePerson.do</service>
-		<service methodName="updateCert" classPath="com.control.CertControl">/updateCert.do</service>
+		<!-- 添加用户信息 -->
+		<service methodName="addUser" classPath="com.control.UserControl">/addUser.do</service>
 	</services>
 </webServlet>
