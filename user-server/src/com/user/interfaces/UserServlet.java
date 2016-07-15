@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.common.entity.PR;
-import com.common.entity.User;
 import com.common.server.SMSHandler;
 import com.common.util.Cache;
 import com.common.util.Jackson;
 import com.common.util.StringUtil;
 import com.user.process.UserService;
+import com.user.process.entity.User;
 
 
 
@@ -172,6 +172,9 @@ public class UserServlet extends HttpServlet implements UserInterface
 		}
 	}
 
+	/**
+	 * 用户登录
+	 */
 	@Override
 	public PR userLogin(String username, String password){
 		user = new User();

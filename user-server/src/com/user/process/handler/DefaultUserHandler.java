@@ -1,8 +1,8 @@
 package com.user.process.handler;
 
-import com.common.entity.User;
 import com.common.util.SqlFactory;
 import com.common.util.StringUtil;
+import com.user.process.entity.User;
 
 public class DefaultUserHandler {
 	private User user;

@@ -1,7 +1,7 @@
 package com.user.process;
 
 import com.common.entity.PR;
-import com.common.entity.User;
+import com.user.process.entity.User;
 
 public interface IUserService {
 	/**

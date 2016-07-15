@@ -1,9 +1,9 @@
 package com.user.process;
 
 import com.common.entity.PR;
-import com.common.entity.User;
 import com.common.util.StringUtil;
 import com.user.process.dao.UserDao;
+import com.user.process.entity.User;
 import com.user.process.handler.DefaultUserHandler;
 
 public class UserService implements IUserService{

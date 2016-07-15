@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import com.common.entity.User;
+import com.user.process.entity.User;
 
 public class UserDao extends ABaseDao<User> implements IUserDao{
 
