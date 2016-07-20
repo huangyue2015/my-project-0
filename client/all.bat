@@ -1,0 +1,9 @@
+@echo off 
+cd C:/Users/Administrator/git/TEST/common/
+call ant
+cd C:/Users/Administrator/git/TEST/user-server/
+call ant
+cd C:/Users/Administrator/git/TEST/goods-server/
+call ant
+cd C:/Users/Administrator/git/TEST/community-server/
+call ant
