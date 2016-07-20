@@ -15,13 +15,20 @@ public class UserDao extends ABaseDao<User> implements IUserDao{
 		try {
 			con = iConnectionPool.getConnection();
 			String sql = "select password from user where username='"+username+"' or mobile = '"+username+"'";
+			if(logger.isInfoEnabled())
+				logger.info("selectUserByUsername ---> sql : " + sql);
 			ps = con.prepareStatement(sql);
 			ResultSet resultSet = ps.executeQuery();
 			while(resultSet.next())
 			{
 				return resultSet.getString("password");
 			}
-		} finally {
+		} 
+		catch (Exception e){
+			logger.error(e);
+			throw e;
+		}
+		finally {
 			if(con != null)
 				iConnectionPool.releaseConnection(con);
 			if(ps != null)

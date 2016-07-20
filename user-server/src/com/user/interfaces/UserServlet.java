@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.common.entity.PR;
 import com.common.server.SMSHandler;
 import com.common.util.Cache;
@@ -46,10 +48,10 @@ public class UserServlet extends HttpServlet implements UserInterface
 	
 	
 	private static final long serialVersionUID = 1L;
-	
+	private static final Class<?> UserServletClass = UserServlet.class;
 	private UserService userService = new UserService();
 	private User user;
-	
+	private static Logger logger = Logger.getLogger(UserServletClass);
 	/**********************************************************************私有方法**************************************************************************************/
 	
 	
@@ -62,13 +64,14 @@ public class UserServlet extends HttpServlet implements UserInterface
 	{
 		try {
 			String spr = Jackson.getDefaultObjectMapper().writeValueAsString(pr);
-			System.out.println(spr);
+			if(logger.isInfoEnabled())
+				logger.info("web服务调用返回结果："+ spr);
 			PrintWriter out = resp.getWriter();
 			out.print(spr);
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
     }
 	
@@ -113,6 +116,8 @@ public class UserServlet extends HttpServlet implements UserInterface
 		PR pr = new PR();
 		try {
 			String method = req.getParameter("method");
+			if(logger.isInfoEnabled())
+				logger.info("当前请求的服务："+method);
 			if(StringUtil.isNullOrEmpty(method))
 				throw new Exception("传入的参数有误，参数方法不能为空");
 			else
@@ -133,7 +138,7 @@ public class UserServlet extends HttpServlet implements UserInterface
 			}
 			serializePR(resp, pr);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			pr = new PR(0, "", e.getMessage());
 			serializePR(resp, pr);
 		}
