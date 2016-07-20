@@ -64,16 +64,16 @@ public class ListenerContextHander implements ServletContextListener
 		String path = servletContextEvent.getServletContext().getRealPath("");
 		Date dt=new Date();
 	    SimpleDateFormat matter1=new SimpleDateFormat("yyyy-MM-dd");
-	    String log_dir = String.format("%s/WEB-INF/logs/%s", path, matter1.format(dt));
+	    String log_dir = String.format("%sWEB-INF%slogs%s", path,File.separator, matter1.format(dt));
 		System.setProperty("log.dir", log_dir);
 		System.out.println("log日志存放地址:"+System.getProperty("log.dir"));
-		PropertyConfigurator.configure(path +"\\log4j.properties");
+		PropertyConfigurator.configure(path +"log4j.properties");
 	}
 	
 	private List<String> loadInitConf(ServletContextEvent servletContextEvent)
 	{
 		List<String> list = null;
-		String path = servletContextEvent.getServletContext().getRealPath("")+"\\init.conf";
+		String path = servletContextEvent.getServletContext().getRealPath("")+"init.conf";
 		File file = new File(path);
 		Scanner  sc  = null;
 		FileInputStream in = null;
