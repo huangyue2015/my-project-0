@@ -11,9 +11,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.ServletFilter;
 
-@ServletFilter("/")
 public class EncodingFilter implements Filter
 {
 	private String				encoding;
@@ -22,28 +20,21 @@ public class EncodingFilter implements Filter
 	// 项目结束时就已经进行销毁
 	public void destroy()
 	{
-		System.out.println("end do the encoding filter!");
 		params = null;
 		encoding = null;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException
 	{
-		// UtilTimerStack.push("EncodingFilter_doFilter:");
-		System.out.println("before encoding " + encoding + " filter！");
 		req.setCharacterEncoding(encoding);
 	    resp.setCharacterEncoding(encoding);
 		resp.setContentType("text/html;charset="+encoding);
 		chain.doFilter(req, resp);
-		System.out.println("after encoding " + encoding + " filter！");
-		System.err.println("----------------------------------------");
-		// UtilTimerStack.pop("EncodingFilter_doFilter:");
 	}
 
 	// 项目启动时就已经进行读取
 	public void init(FilterConfig config) throws ServletException
 	{
-		System.out.println("begin do the encoding filter!");
 		encoding = config.getInitParameter("encoding");
 		for (Enumeration e = config.getInitParameterNames(); e.hasMoreElements();)
 		{
