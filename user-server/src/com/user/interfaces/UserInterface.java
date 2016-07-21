@@ -1,13 +1,14 @@
 package com.user.interfaces;
 
 import com.common.entity.PR;
+import com.common.system.ServletInterface;
 
 /**
  * 用户服务接口
  * @author Administrator
  *
  */
-public interface UserInterface {
+public interface UserInterface extends ServletInterface{
 	
 	/**
 	 * 添加用户信息(url="http://192.168.1.109:8080/client/user?method=userRegister")
