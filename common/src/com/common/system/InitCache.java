@@ -7,6 +7,9 @@ import com.common.util.Cache;
 import com.common.util.Globle;
 
 public class InitCache extends AbstractInitSystem{
+	
+	
+	
 	@Override
 	public void init()
 	{
@@ -30,11 +33,14 @@ public class InitCache extends AbstractInitSystem{
 			while (true) {
 				try 
 				{
+					if(logger.isInfoEnabled())
+						logger.info("系统将于"+sss+"秒后刷新手机验证码限制缓存");
 					Thread.sleep(sss);
 					Cache.mobileSendLockMap.clear();
 					sss = 24 * 60 * 60 * 1000 ;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					logger.error(e);
 				}
 			}
 		}
