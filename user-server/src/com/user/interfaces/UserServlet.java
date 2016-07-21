@@ -1,8 +1,5 @@
 package com.user.interfaces;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +11,6 @@ import com.common.entity.PR;
 import com.common.server.SMSHandler;
 import com.common.system.DefaultServletInterlayer;
 import com.common.util.Cache;
-import com.common.util.Jackson;
 import com.common.util.StringUtil;
 import com.user.process.UserService;
 import com.user.process.entity.User;
@@ -72,12 +68,10 @@ public class UserServlet extends HttpServlet implements UserInterface
 	}
 	
 	
-	/********************************************************************** 接 口 **************************************************************************************/
-	
 	@Override
 	public void service(HttpServletRequest req, HttpServletResponse resp)
 	{
-		DefaultServletInterlayer defaultServletInterlayer = new DefaultServletInterlayer(servletInterface, req, resp);
+		DefaultServletInterlayer defaultServletInterlayer = new DefaultServletInterlayer(this, req, resp);
 		try {
 			defaultServletInterlayer.common(); 
 		} catch (Exception e) {

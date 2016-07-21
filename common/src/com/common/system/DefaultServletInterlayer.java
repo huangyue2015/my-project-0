@@ -48,7 +48,6 @@ public class DefaultServletInterlayer {
 			else
 				return servletInterface.registerService(method,req);//服务注册
 		} catch (Exception e) {
-			logger.error(e);
 			throw e;
 		}
 	}
